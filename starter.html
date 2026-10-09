@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>วิชาวิทยาการคำนวณ ม.2 - บทเรียน</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        },
+                        accent: {
+                            amber: '#f59e0b',
+                            emerald: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS File -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body
+    class="text-slate-700 antialiased min-h-screen flex flex-col justify-between bg-slate-50 relative overflow-x-hidden">
+
+    <!-- HEADER NAVIGATION (Sticky 80px) -->
+    <header class="sticky top-0 z-50 glass-nav border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToSection(event, 'lessons')">
+                    <div
+                        class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                        <i class="fa-solid fa-bus text-xl"></i>
+                    </div>
+                    <div>
+                        <span
+                            class="font-heading font-bold text-lg text-slate-900 tracking-tight block leading-tight">วิชาวิทยาการคำนวณ</span>
+                        <span class="text-xs font-medium text-brand-600">ระดับชั้นมัธยมศึกษาปีที่ 2</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#lessons" id="nav-lessons" onclick="scrollToSection(event, 'lessons')"
+                        class="nav-item text-brand-600 font-semibold flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-brand-50 border border-brand-100 transition-all">
+                        <i class="fa-solid fa-book-open"></i> แบบทดสอบก่อนเรียน
+                    </a>
+                    <a href="#lessons" id="nav-lessons" onclick="scrollToSection(event, 'lessons')"
+                        class="nav-item text-brand-600 font-semibold flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-brand-50 border border-brand-100 transition-all">
+                        <i class="fa-solid fa-book-open"></i> แบบทดสอบหลังเรียน
+                    </a>
+                </nav>
+
+
+
+                <!-- Student Login / Profile Button (ไม่มี Progress Bar แล้ว) -->
+                <div class="flex items-center gap-3">
+                    <div id="user-display-name" class="hidden sm:flex flex-col items-end text-xs">
+                        <span class="text-slate-400 font-light">ผู้เรียนเข้าใช้งาน:</span>
+                        <span id="current-user-text"
+                            class="font-bold text-slate-800 font-heading">ยังไม่ได้เข้าสู่ระบบ</span>
+                    </div>
+
+                    <button onclick="toggleProfileModal()"
+                        class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors relative cursor-pointer"
+                        title="โปรไฟล์ / เข้าสู่ระบบ">
+                        <i class="fa-solid fa-user-graduate text-base"></i>
+                        <span id="user-status-dot"
+                            class="absolute top-1 right-1 w-2.5 h-2.5 bg-slate-400 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow relative z-10">
+
+        <!-- SECTION 1: LESSON CARDS -->
+        <section id="lessons"
+            class="w-full min-h-[calc(100vh-5rem)] flex flex-col justify-center py-8 relative bg-slate-50 scroll-mt-20">
+            <div class="bg-blob-teal -top-20 -left-20"></div>
+            <div class="bg-blob-amber top-1/2 -right-20"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+
+                <div class="text-center max-w-3xl mx-auto mb-6 lg:mb-8">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-100/80 text-brand-700 mb-2 border border-brand-200/50">
+                        <i class="fa-solid fa-graduation-cap"></i> Interactive Learning Roadmap
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 font-heading tracking-tight mb-2">
+                        เส้นทางการเรียนรู้ 3 บทเรียนหลัก
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base font-light">
+                        เรียนรู้ทฤษฎีควบคู่การปฏิบัติผ่านมินิเกมและกิจกรรม Interactive โต้ตอบบนเว็บ
+                    </p>
+                </div>
+
+                <!-- 3 Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
+
+                    <!-- CARD 1 -->
+                    <div
+                        class="lesson-card lesson-card-1 bg-white rounded-3xl border border-slate-200 overflow-hidden flex flex-col justify-between relative group shadow-sm hover:shadow-md transition-all">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span
+                                    class="px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-100">
+                                    บทที่ 1
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-teal-50 text-brand-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-puzzle-piece"></i>
+                                    </div>
+                                </span>
+                            </div>
+
+
+
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">
+                                การแบ่งปัญหาใหญ่เป็นปัญหาย่อย
+                            </h3>
+                            <p class="text-xs text-slate-400 font-medium mb-2">(Decomposition)</p>
+
+                            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
+                                เรียนรู้การย่อยระบบตั๋วรถเมล์ที่ซับซ้อน ออกเป็น 4 ปัญหาย่อย
+                                เพื่อให้ง่ายต่อการวิเคราะห์และออกแบบวิธีแก้ไข
+                            </p>
+
+                            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                <div class="text-xs font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-gamepad text-brand-500"></i> วัตถุประสงค์การเรียนรู้:
+                                </div>
+                                <p class="text-xs text-slate-600 leading-snug">
+                                    1.
+                                    อธิบายความหมายและความสำคัญของแนวคิดเชิงคำนวณและกระบวนการแบ่งปัญหาใหญ่เป็นปัญหาย่อย
+                                    (Decomposition) ได้ <br>
+                                    2. วิเคราะห์และจำแนกปัญหาใหญ่ให้เป็นปัญหาย่อยตามสถานการณ์ที่กำหนดได้ <br>
+                                    3. มีความมุ่งมั่นและกระตือรือร้นในการร่วมกิจกรรมแก้ปัญหา
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-6 pt-0">
+                            <button onclick="startLesson(1)"
+                                class="btn-action w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-brand-600 text-white font-heading text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md shadow-slate-900/10">
+                                <span>เริ่มเรียนบทที่ 1</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2 -->
+                    <div
+                        class="lesson-card lesson-card-2 bg-white rounded-3xl border border-slate-200 overflow-hidden flex flex-col justify-between relative group shadow-sm hover:shadow-md transition-all">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span
+                                    class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100">
+                                    บทที่ 2
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                    </div>
+                                </span>
+                            </div>
+
+
+
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">
+                                การออกแบบอัลกอริทึม
+                            </h3>
+                            <p class="text-xs text-slate-400 font-medium mb-2">(Algorithm Design)</p>
+
+                            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
+                                การวางลำดับขั้นตอน วิธีการคิดค่ารถเมล์ตามเงื่อนไข ถ่ายทอดออกมาเป็น รหัสลำลอง
+                                (Pseudocode) และ ผังงาน (Flowchart)
+                            </p>
+
+                            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                <div class="text-xs font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-people-group text-amber-500"></i> วัตถุประสงค์การเรียนรู้:
+                                </div>
+                                <p class="text-xs text-slate-600 leading-snug">
+                                    1. อธิบายความหมายและรูปแบบการแสดงอัลกอริทึม (ผังงาน/รหัสลำลอง) ได้ <br>
+                                    2. ออกแบบอัลกอริทึมในรูปแบบผังงาน (Flowchart) เพื่อแก้ปัญหาที่กำหนดได้ <br>
+                                    3. มีความมุ่งมั่นและรอบคอบในการออกแบบขั้นตอนวิธี
+
+                            </div>
+                        </div>
+
+                        <div class="p-6 pt-0">
+                            <button onclick="startLesson(2)"
+                                class="btn-action w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-amber-600 text-white font-heading text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md shadow-slate-900/10">
+                                <span>เริ่มเรียนบทที่ 2</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3 -->
+                    <div
+                        class="lesson-card lesson-card-3 bg-white rounded-3xl border border-slate-200 overflow-hidden flex flex-col justify-between relative group shadow-sm hover:shadow-md transition-all">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span
+                                    class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    บทที่ 3
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fa-brands fa-python"></i>
+                                    </div>
+                                </span>
+                            </div>
+
+
+
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">
+                                การเขียนโปรแกรม Python
+                            </h3>
+                            <p class="text-xs text-slate-400 font-medium mb-2">(Python & Web Simulator)</p>
+
+                            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
+                                แปลงผังงาน Flowchart เป็นโค้ด Python จริงด้วยคำสั่ง `if-elif-else`
+                                และสร้างตัวจำลองเครื่องออกตั๋วรถเมล์
+                            </p>
+
+                            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                <div class="text-xs font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-code text-emerald-500"></i> วัตถุประสงค์การเรียนรู้:
+                                </div>
+                                <p class="text-xs text-slate-600 leading-snug">
+                                    1. อธิบายหลักการทำงานของโปรแกรมที่มีการใช้เงื่อนไขในการแก้ปัญหาได้ <br>
+                                    2. ออกแบบอัลกอริทึมและเขียนโปรแกรมภาษาไพทอนเพื่อคำนวณค่าโดยสารตามเงื่อนไขที่กำหนดได้
+                                    <br>
+                                    3. มีความมุ่งมั่นในการแก้ปัญหาและเห็นประโยชน์ของการนำเทคโนโลยีมาใช้ในชีวิตประจำวัน
+                                    <br>
+
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-6 pt-0">
+                            <button onclick="startLesson(3)"
+                                class="btn-action w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-emerald-600 text-white font-heading text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md shadow-slate-900/10">
+                                <span>เริ่มเรียนบทที่ 3</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 relative z-10 text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs">
+            <p>© 2026 Computing Science Grade 8 - Bus Fare System Case Study</p>
+        </div>
+    </footer>
+
+    <!-- STUDENT LOGIN & CONFIRMATION MODAL -->
+    <div id="profile-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl border border-slate-100 relative">
+
+            <!-- ปุ่มปิด Modal -->
+            <button onclick="toggleProfileModal()"
+                class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <!-- STATE 1: ฟอร์มค้นหาด้วยเลขที่ -->
+            <div id="login-form-state">
+                <div class="text-center mb-5">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <h4 class="font-heading font-bold text-lg text-slate-900">เข้าสู่ระบบผู้เรียน</h4>
+                    <p class="text-xs text-slate-500 font-light mt-0.5">กรอกเลขที่เพื่อยืนยันตัวตนและบันทึกคะแนน</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">เลขที่ของคุณ:</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                <i class="fa-solid fa-hashtag text-xs"></i>
+                            </span>
+                            <input type="number" id="student-no-input" min="1" max="50" required
+                                placeholder="เช่น 1 หรือ 15"
+                                class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                        </div>
+                        <!-- ข้อความแจ้งเตือนเมื่อค้นหาไม่พบ -->
+                        <p id="search-error-msg" class="text-xs text-red-500 font-medium mt-1.5 hidden"></p>
+                    </div>
+
+                    <button type="button" onclick="searchStudent(event)"
+                        class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-heading text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        <span>ค้นหาข้อมูล</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATE 2: ยืนยันข้อมูลนักเรียน -->
+            <div id="confirm-student-state" class="hidden">
+                <div class="text-center mb-5">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-brand-600 border-2 border-brand-500 flex items-center justify-center text-2xl mx-auto mb-2 font-bold shadow-sm"
+                        id="confirm-avatar"></div>
+                    <span
+                        class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-100"
+                        id="confirm-no-badge">เลขที่ -</span>
+                    <h4 class="font-heading font-bold text-lg text-slate-900 mt-2" id="confirm-name">ชื่อ - นามสกุล</h4>
+                    <p class="text-xs text-slate-500 font-medium" id="confirm-class">ชั้นมัธยมศึกษาปีที่ 2</p>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" onclick="backToSearch()"
+                        class="w-1/3 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition-colors">
+                        เปลี่ยนเลขที่
+                    </button>
+                    <button type="button" onclick="confirmLogin()"
+                        class="w-2/3 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-heading text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>ยืนยันเข้าสู่ระบบ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATE 3: เมื่อยืนยันและเข้าสู่ระบบแล้ว -->
+            <div id="logged-in-state" class="hidden">
+                <div class="text-center mb-5">
+                    <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-2xl mx-auto mb-2 font-bold shadow-sm"
+                        id="logged-avatar"></div>
+                    <div class="flex items-center justify-center gap-1.5 mt-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="text-[11px] font-bold text-emerald-600">ยืนยันตัวตนเรียบร้อย</span>
+                    </div>
+                    <h4 class="font-heading font-bold text-lg text-slate-900 mt-1" id="logged-name">ชื่อ - นามสกุล</h4>
+                    <p class="text-xs text-slate-500" id="logged-info">เลขที่ - | ม.2</p>
+                </div>
+
+                <button type="button" onclick="logoutStudent()"
+                    class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>ออกจากระบบ / สลับบัญชี</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Custom JS File -->
+    <script src="main.js"></script>
+</body>
+
+</html>

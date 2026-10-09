@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Computational Thinking Challenge</title>
+
+  <!-- MediaPipe Hands & Camera CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg: #070b18;
+      --cyan: #22d3ee;
+      --purple: #a855f7;
+      --green: #34d399;
+      --red: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    #cameraVideo {
+      display: none;
+    }
+
+    #gameCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7, 11, 24, 0.85);
+      backdrop-filter: blur(8px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .panel {
+      width: min(720px, 92vw);
+      padding: 32px 28px;
+      border-radius: 28px;
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* Time Selector */
+    .time-selector {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0 24px;
+    }
+
+    .time-btn {
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .time-btn.active {
+      background: var(--cyan);
+      color: #000;
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 28px;
+      margin: 10px 8px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn.green {
+      background: linear-gradient(135deg, #059669, #16a34a);
+    }
+
+    /* HUD และ Scorebar */
+    #gameUI {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 30px 30px;
+    }
+
+    #gameUI.active {
+      display: flex;
+    }
+
+    .hudTop {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .hudRow {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .hudBox {
+      padding: 8px 18px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: bold;
+      font-size: 17px;
+      backdrop-filter: blur(10px);
+    }
+
+    .scorebar-wrapper {
+      width: 100%;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .scorebar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), #ec4899);
+      border-radius: 999px;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+
+    #questionBox {
+      position: absolute;
+      top: 70px;
+      /* ระยะห่างจากด้านบน ปรับเพิ่ม/ลดได้ตามต้องการ */
+      left: 50%;
+      transform: translateX(-50%);
+      /* จัดให้อยู่ตรงกลางหน้าจอในแนวตั้ง */
+
+      text-align: center;
+      padding: 16px 28px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid var(--cyan);
+      width: min(900px, 94vw);
+      backdrop-filter: blur(10px);
+      z-index: 20;
+      /* ดึงขึ้นมาให้อยู่เหนือกล้อง */
+    }
+
+    #questionCategory {
+      font-size: 15px;
+      color: var(--cyan);
+      margin-bottom: 6px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    #questionText {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: bold;
+      line-height: 1.35;
+    }
+
+    #choices {
+      align-self: center;
+      width: min(1150px, 96vw);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      pointer-events: auto;
+    }
+
+    .choice {
+      position: relative;
+      min-height: 155px;
+      padding: 20px 14px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .choice .icon {
+      font-size: 44px;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .choice .en {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .choice .th {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 3px;
+    }
+
+    .choice.hovered {
+      transform: translateY(-8px) scale(1.06);
+      border-color: var(--cyan);
+      box-shadow: 0 0 35px rgba(34, 211, 238, 0.7);
+    }
+
+    .choice.selected {
+      opacity: 0.35;
+      filter: grayscale(1);
+      transform: scale(0.96);
+    }
+
+    .progressRing {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 8px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), #818cf8);
+      box-shadow: 0 0 14px var(--cyan);
+    }
+
+    #aiStatus {
+      position: fixed;
+      left: 24px;
+      bottom: 24px;
+      z-index: 6;
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.75);
+      font-size: 14px;
+      font-weight: bold;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    #feedback {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #feedback.show {
+      display: flex;
+    }
+
+    .feedbackCard {
+      padding: 26px 50px;
+      border-radius: 24px;
+      font-size: 36px;
+      font-weight: bold;
+      background: rgba(15, 23, 42, 0.96);
+      border: 2px solid #fff;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .feedbackCard.good {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .feedbackCard.bad {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    .btn.amber {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      text-decoration: none !important;
+      /* ป้องกันเส้นขีดใต้ */
+    }
+
+    .btn.amber:hover {
+      background: linear-gradient(135deg, #d97706, #b45309);
+    }
+
+    /* ตารางสรุปผล */
+    .summary-box {
+      margin: 20px 0;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .summary-title {
+      font-size: 17px;
+      font-weight: bold;
+      color: var(--cyan);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .error-item {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      margin-bottom: 8px;
+      border-left: 4px solid var(--red);
+      font-size: 14px;
+    }
+
+    .error-item .q-title {
+      font-weight: bold;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+
+    .error-item .q-meta {
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .error-tag {
+      color: var(--red);
+      font-weight: bold;
+    }
+
+    .ans-tag {
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .perfect-score {
+      text-align: center;
+      color: var(--green);
+      font-size: 16px;
+      padding: 15px;
+      font-weight: bold;
+    }
+
+    @media(max-width: 820px) {
+      #choices {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .choice {
+        min-height: 130px;
+        padding: 14px;
+      }
+
+      .choice .icon {
+        font-size: 36px;
+      }
+
+      .choice .en {
+        font-size: 15px;
+      }
+
+      .choice .th {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <video id="cameraVideo" playsinline></video>
+  <canvas id="gameCanvas"></canvas>
+
+  <section id="startScreen" class="screen active">
+    <div class="panel">
+      <div style="font-size: 50px; margin-bottom: 8px;">🧠💡</div>
+      <h1 style="font-size: 32px; margin-bottom: 12px;">Computational Thinking<br>AR Challenge</h1>
+      <p style="color: #cbd5e1; font-size: 16px; margin-bottom: 10px;">เลือกเวลาเล่นที่ต้องการ แล้วใช้นิ้วชี้ค้างไว้ 1
+        วินาทีเพื่อตอบ</p>
+
+      <div style="font-size: 14px; color: var(--cyan); font-weight: bold; margin-top: 15px;">⏱️ ปรับเวลาเล่น:</div>
+      <div class="time-selector">
+        <button class="time-btn" data-time="30">30 วิ</button>
+        <button class="time-btn active" data-time="60">60 วิ</button>
+        <button class="time-btn" data-time="90">90 วิ</button>
+        <button class="time-btn" data-time="120">120 วิ</button>
+      </div>
+
+      <button id="startBtn" class="btn">▶ เริ่มเล่น (เปิดกล้อง)</button>
+      <button id="demoBtn" class="btn green">🎮 เล่นด้วยเมาส์ (Demo)</button> <br><br>
+      <a href="lesson1.html" id="lessonBtn" class="btn amber no-underline inline-block">📚 กลับไปที่บทเรียน</a>
+  </section>
+
+  <section id="loadingScreen" class="screen">
+    <div class="panel">
+      <div style="font-size: 48px; margin-bottom: 10px;">⏳</div>
+      <h2>กำลังเริ่มระบบตรวจจับนิ้วมือ...</h2>
+    </div>
+  </section>
+
+  <div id="gameUI">
+    <div class="hudTop">
+      <div class="hudRow">
+        <div class="hudBox">⭐ คะแนน: <span id="score">0</span> / 10</div>
+        <div class="hudBox">ข้อที่ <span id="currentQ">1</span> / <span id="totalQ">10</span></div>
+        <div class="hudBox">⏱️ <span id="timer">60</span>s</div>
+      </div>
+      <div class="scorebar-wrapper">
+        <div id="scoreBarFill" class="scorebar-fill"></div>
+      </div>
+    </div>
+
+    <div id="questionBox">
+      <div id="questionCategory">สถานการณ์</div>
+      <div id="questionText">คำถามจะปรากฏที่นี่</div>
+    </div>
+
+    <div id="choices"></div>
+  </div>
+
+  <div id="aiStatus">🤖 เตรียมพร้อมระบบ...</div>
+
+  <div id="feedback">
+    <div id="feedbackCard" class="feedbackCard">🎉 ถูกต้อง!</div>
+  </div>
+
+  <section id="resultScreen" class="screen">
+    <div class="panel">
+      <div style="font-size: 50px; margin-bottom: 6px;">🏆</div>
+      <h2>ผลการทดสอบ</h2>
+      <p style="font-size: 24px; margin: 12px 0;">คะแนนรวม: <b id="finalScore" style="color: var(--cyan);">0</b> / 10
+        คะแนน</p>
+
+      <!-- พื้นที่สรุปข้อที่ตอบผิด -->
+      <div class="summary-box">
+        <div class="summary-title">📝 รายละเอียดข้อที่ตอบผิด:</div>
+        <div id="errorList"></div>
+      </div>
+      <button id="restartBtn" class="btn">ย้อนกลับ</button>
+    </div>
+  </section>
+
+  <script>
+    let selectedGameTime = 60;
+    const CONFIG = { HOVER_TIME: 1000 };
+
+    const PILLARS = [
+      { id: "decomp", name: "Decomposition", thai: "การแยกส่วนประกอบ", icon: "🧩" },
+      { id: "pattern", name: "Pattern Recognition", thai: "การหารูปแบบ", icon: "🔍" },
+      { id: "abstract", name: "Abstraction", thai: "การคิดเชิงนามธรรม", icon: "💡" },
+      { id: "algo", name: "Algorithm Design", thai: "การออกแบบขั้นตอนวิธี", icon: "📋" }
+    ];
+
+    const QUESTIONS = [
+      {
+        text: "การแยกชิ้นส่วนของจักรยานออกเป็น ล้อ โซ่ แฮนด์ เกียร์ เพื่อทำความเข้าใจ",
+        cat: "สถานการณ์ที่ 1",
+        answer: "Decomposition"
+      },
+      {
+        text: "การแยกปัญหาการทำโครงงานออกเป็นงานย่อยๆ เช่น เก็บข้อมูล วิเคราะห์ผล และทำเล่ม",
+        cat: "สถานการณ์ที่ 2",
+        answer: "Decomposition"
+      },
+      {
+        text: "การสังเกตว่ารถยนต์ มอเตอร์ไซค์ และรถบรรทุก ต่างก็มีล้อและเครื่องยนต์เหมือนกัน",
+        cat: "สถานการณ์ที่ 3",
+        answer: "Pattern Recognition"
+      },
+      {
+        text: "การสังเกตพฤติกรรมยอดขายสินค้าที่มักจะเพิ่มสูงขึ้นทุกวันหยุดสุดสัปดาห์",
+        cat: "สถานการณ์ที่ 4",
+        answer: "Pattern Recognition"
+      },
+      {
+        text: "การวาดแผนที่แบบย่อโดยใส่เฉพาะจุดสำคัญและตัดรายละเอียดต้นไม้หรือสิ่งที่ไม่จำเป็นออก",
+        cat: "สถานการณ์ที่ 5",
+        answer: "Abstraction"
+      },
+      {
+        text: "การระบุเฉพาะข้อมูลที่จำเป็น เช่น รหัสนักเรียนและเกรด โดยไม่ต้องสนใจสีเสื้อหรือส่วนสูง",
+        cat: "สถานการณ์ที่ 6",
+        answer: "Abstraction"
+      },
+      {
+        text: "การเขียนคู่มือสูตรทำอาหารแบบเป็นขั้นเป็นตอน ตั้งแต่เตรียมของจนถึงปรุงเสร็จ",
+        cat: "สถานการณ์ที่ 7",
+        answer: "Algorithm Design"
+      },
+      {
+        text: "การเขียนผังงาน (Flowchart) กำหนดเงื่อนไขการทำงานของระบบตัดเกรดอัตโนมัติ",
+        cat: "สถานการณ์ที่ 8",
+        answer: "Algorithm Design"
+      },
+      {
+        text: "การแบ่งโจทย์คณิตศาสตร์ข้อยาวๆ ออกเป็นขั้นตอนการคิดทีละท่อน",
+        cat: "สถานการณ์ที่ 9",
+        answer: "Decomposition"
+      },
+      {
+        text: "การสังเกตรหัสลำดับตัวเลข 2, 4, 6, 8 แล้วทำนายตัวถัดไปว่าเป็น 10",
+        cat: "สถานการณ์ที่ 10",
+        answer: "Pattern Recognition"
+      }
+    ];
+
+    const $ = id => document.getElementById(id);
+    const canvas = $("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let state = {
+      mode: "camera", score: 0, timeLeft: selectedGameTime,
+      qIndex: 0, questionList: [], currentQ: null, gameRunning: false,
+      pointer: { x: -100, y: -100 },
+      hover: { el: null, start: 0 },
+      camera: null, hands: null,
+      mistakes: {} // บันทึกข้อที่ตอบผิด { "ข้อความคำถาม": { count: จำนวนครั้ง, answer: คำตอบที่ถูก } }
+    };
+
+    document.querySelectorAll(".time-btn").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedGameTime = parseInt(btn.dataset.time, 10);
+      };
+    });
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    async function startGame(mode) {
+      state.mode = mode;
+      $("startScreen").classList.remove("active");
+      $("loadingScreen").classList.add("active");
+
+      if (mode === "camera") {
+        await initAI();
+      } else {
+        window.onmousemove = e => { state.pointer = { x: e.clientX, y: e.clientY }; };
+      }
+
+      $("loadingScreen").classList.remove("active");
+      $("gameUI").classList.add("active");
+
+      state.questionList = [...QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
+      state.score = 0;
+      state.timeLeft = selectedGameTime;
+      state.qIndex = 0;
+      state.gameRunning = true;
+      state.mistakes = {}; // รีเซ็ตประวัติตอบผิด
+
+      updateScoreBar();
+      nextQuestion();
+      startTimer();
+      requestAnimationFrame(renderLoop);
+    }
+
+    async function initAI() {
+      const video = $("cameraVideo");
+      state.hands = new Hands({
+        locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+      });
+
+      state.hands.setOptions({
+        maxNumHands: 1,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      state.hands.onResults(results => {
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+          const tip = results.multiHandLandmarks[0][8];
+          state.pointer = {
+            x: (1 - tip.x) * canvas.width,
+            y: tip.y * canvas.height
+          };
+          $("aiStatus").textContent = "👆 ตรวจพบนิ้วชี้";
+        } else {
+          state.pointer = { x: -100, y: -100 };
+          $("aiStatus").textContent = "🖐️ กรุณายกนิ้วชี้ขึ้นมา";
+        }
+      });
+
+      state.camera = new Camera(video, {
+        onFrame: async () => {
+          if (state.gameRunning && state.mode === "camera") {
+            await state.hands.send({ image: video });
+          }
+        },
+        width: 1280, height: 720
+      });
+
+      await state.camera.start();
+    }
+
+    function updateScoreBar() {
+      const total = state.questionList.length || 10;
+      const pct = (state.score / total) * 100;
+      $("scoreBarFill").style.width = `${pct}%`;
+      $("score").textContent = state.score;
+    }
+
+    function nextQuestion() {
+      if (state.qIndex >= state.questionList.length) { endGame(); return; }
+      state.currentQ = state.questionList[state.qIndex];
+      $("questionCategory").textContent = `Computational Thinking — ${state.currentQ.cat}`;
+      $("questionText").textContent = state.currentQ.text;
+      $("currentQ").textContent = state.qIndex + 1;
+      $("totalQ").textContent = state.questionList.length;
+      updateScoreBar();
+
+      const wrap = $("choices"); wrap.innerHTML = "";
+      PILLARS.forEach(p => {
+        const b = document.createElement("div");
+        b.className = "choice";
+        b.dataset.name = p.name;
+        b.innerHTML = `
+          <div class="icon">${p.icon}</div>
+          <span class="en">${p.name}</span>
+          <span class="th">${p.thai}</span>
+          <div class="progressRing"></div>`;
+        wrap.appendChild(b);
+      });
+    }
+
+    function checkCollision() {
+      const choices = [...document.querySelectorAll(".choice:not(.selected)")];
+      let hit = null;
+
+      for (const el of choices) {
+        const r = el.getBoundingClientRect();
+        if (state.pointer.x >= r.left && state.pointer.x <= r.right &&
+          state.pointer.y >= r.top && state.pointer.y <= r.bottom) {
+          hit = el; break;
+        }
+      }
+
+      choices.forEach(el => {
+        el.classList.toggle("hovered", el === hit);
+        if (el !== hit) el.querySelector(".progressRing").style.width = "0%";
+      });
+
+      if (!hit) { state.hover = { el: null, start: 0 }; return; }
+
+      if (state.hover.el !== hit) {
+        state.hover = { el: hit, start: performance.now() };
+      }
+
+      const progress = Math.min(1, (performance.now() - state.hover.start) / CONFIG.HOVER_TIME);
+      hit.querySelector(".progressRing").style.width = `${progress * 100}%`;
+
+      if (progress >= 1) {
+        const isCorrect = hit.dataset.name === state.currentQ.answer;
+        state.hover = { el: null, start: 0 };
+        hit.classList.add("selected");
+        if (isCorrect) {
+          state.score++;
+          updateScoreBar();
+          showFeedback(true);
+          setTimeout(() => { state.qIndex++; nextQuestion(); }, 700);
+        } else {
+          // บันทึกการตอบผิด
+          const qText = state.currentQ.text;
+          if (!state.mistakes[qText]) {
+            state.mistakes[qText] = {
+              qNum: state.qIndex + 1,
+              count: 1,
+              answer: state.currentQ.answer
+            };
+          } else {
+            state.mistakes[qText].count++;
+          }
+          showFeedback(false);
+        }
+      }
+    }
+
+    function showFeedback(good) {
+      const f = $("feedback"), card = $("feedbackCard");
+      card.className = `feedbackCard ${good ? "good" : "bad"}`;
+      card.textContent = good ? "🎉 ถูกต้อง (+1)" : "❌ ยังไม่ถูก";
+      f.classList.add("show");
+      setTimeout(() => f.classList.remove("show"), 600);
+    }
+
+    function renderLoop() {
+      if (!state.gameRunning) return;
+
+      if (state.mode === "demo") {
+        ctx.fillStyle = "#070b18";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      if (state.pointer.x > 0) {
+        ctx.beginPath();
+        ctx.arc(state.pointer.x, state.pointer.y, 22, 0, Math.PI * 2);
+        ctx.strokeStyle = "#22d3ee"; ctx.lineWidth = 4; ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(state.pointer.x, state.pointer.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = "#f472b6"; ctx.fill();
+      }
+
+      checkCollision();
+      requestAnimationFrame(renderLoop);
+    }
+
+    function startTimer() {
+      $("timer").textContent = state.timeLeft;
+      const timer = setInterval(() => {
+        if (!state.gameRunning) { clearInterval(timer); return; }
+        state.timeLeft--;
+        $("timer").textContent = state.timeLeft;
+        if (state.timeLeft <= 0) { clearInterval(timer); endGame(); }
+      }, 1000);
+    }
+
+    function renderSummary() {
+      const list = $("errorList");
+      list.innerHTML = "";
+
+      const mistakeKeys = Object.keys(state.mistakes);
+      if (mistakeKeys.length === 0) {
+        list.innerHTML = `<div class="perfect-score">🌟 ยอดเยี่ยมมาก! คุณตอบถูกครบทุกข้อโดยไม่ตอบผิดเลย</div>`;
+        return;
+      }
+
+      mistakeKeys.forEach(qText => {
+        const item = state.mistakes[qText];
+        const row = document.createElement("div");
+        row.className = "error-item";
+        row.innerHTML = `
+          <div class="q-title">ข้อที่ ${item.qNum}: ${qText}</div>
+          <div class="q-meta">
+            <span>ตอบผิดไป: <span class="error-tag">${item.count} ครั้ง</span></span>
+            <span>เฉลยที่ถูกต้อง: <span class="ans-tag">${item.answer}</span></span>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function endGame() {
+      state.gameRunning = false;
+      $("gameUI").classList.remove("active");
+      $("finalScore").textContent = state.score;
+      renderSummary();
+      $("resultScreen").classList.add("active");
+    }
+
+    $("startBtn").onclick = () => startGame("camera");
+    $("demoBtn").onclick = () => startGame("demo");
+    $("restartBtn").onclick = () => {
+      $("resultScreen").classList.remove("active");
+      $("startScreen").classList.add("active");
+    };
+  </script>
+</body>
+
+</html>
