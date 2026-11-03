@@ -1,132 +1,112 @@
 /**
- * Computing Science Grade 8 - Application Logic (main.js)
+ * Computing Science Grade 8 - Application Logic (system.js)
  */
 
-// ฐานข้อมูลจำลองรายชื่อนักเรียนในห้อง
-const studentDatabase = [
-    { no: 1, name: "เด็กชายกิตติศักดิ์ มีสุข", class: "ม.2/1" },
-    { no: 2, name: "เด็กชายชินวัฒน์ วงศ์ดี", class: "ม.2/1" },
-    { no: 3, name: "เด็กหญิงณิชาภัทร สุขเจริญ", class: "ม.2/1" },
-    { no: 15, name: "เด็กชายสิทธิชนะชัย ชินสกุลกานต์", class: "ม.2/1" }
-];
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoX6QMNNWi6THvdH-7SH7TZJPBIOC3lwQxAmA8p2R7YySFVzv4R69iIfZhDftaxnAzKg/exec";
 
-let tempSelectedStudent = null;
-
-// เปิด / ปิด Modal
-function toggleProfileModal() {
-    const modal = document.getElementById('profile-modal');
-    if (!modal) return;
-
-    modal.classList.toggle('hidden');
-    
-    if (!modal.classList.contains('hidden')) {
-        // ซ่อนข้อความแจ้งเตือนสีแดงเมื่อเปิด Modal ใหม่
-        const errorEl = document.getElementById('search-error-msg');
-        if (errorEl) errorEl.classList.add('hidden');
-
-        const currentStudent = JSON.parse(localStorage.getItem('currentStudent') || 'null');
-        if (currentStudent) {
-            showState('logged-in-state');
-            const avatar = document.getElementById('logged-avatar');
-            const name = document.getElementById('logged-name');
-            const info = document.getElementById('logged-info');
-            
-            if (avatar) avatar.textContent = currentStudent.no;
-            if (name) name.textContent = currentStudent.name;
-            if (info) info.textContent = `เลขที่ ${currentStudent.no} | ${currentStudent.class}`;
-        } else {
-            showState('login-form-state');
-        }
+// 1. ฟังก์ชันเปิด Modal จัดกึ่งกลางจอ
+function openLoginModal() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); // บังคับ flex เพื่อให้ items-center justify-center ทำงาน
+    const errorMsg = document.getElementById('loginErrorMsg');
+    if (errorMsg) errorMsg.classList.add('hidden');
+    const inputNo = document.getElementById('inputNo');
+    if (inputNo) {
+      inputNo.value = '';
+      setTimeout(() => inputNo.focus(), 100);
     }
+  }
 }
 
-// สลับหน้าใน Modal
-function showState(stateId) {
-    const states = ['login-form-state', 'confirm-student-state', 'logged-in-state'];
-    states.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
-    });
-    const target = document.getElementById(stateId);
-    if (target) target.classList.remove('hidden');
+// 2. ฟังก์ชันปิด Modal
+function closeLoginModal() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
 }
 
-// ค้นหานักเรียนจากเลขที่
-function searchStudent(event) {
-    if (event) event.preventDefault();
-    
-    const inputEl = document.getElementById('student-no-input');
-    const errorEl = document.getElementById('search-error-msg');
-
-    if (!inputEl || !inputEl.value) {
-        if (errorEl) {
-            errorEl.textContent = 'กรุณากรอกเลขที่ก่อนกดค้นหา';
-            errorEl.classList.remove('hidden');
-        }
-        return;
+// 3. กดที่แท็บไอคอนโปรไฟล์บน Header
+function handleProfileClick() {
+  const currentStudent = localStorage.getItem("currentStudent");
+  if (currentStudent) {
+    const student = JSON.parse(currentStudent);
+    const name = student.fullName || student.name || "นักเรียน";
+    if (confirm(`ผู้เรียนปัจจุบัน: ${name} (เลขที่ ${student.no})\nต้องการออกจากระบบหรือไม่?`)) {
+      logoutStudent();
     }
+  } else {
+    openLoginModal();
+  }
+}
 
-    const noInput = parseInt(inputEl.value, 10);
-    const found = studentDatabase.find(s => s.no === noInput);
+// 4. เข้าสู่ระบบด้วยเลขที่เพียงอย่างเดียว และดึงชื่อมาแสดง
+async function handleStudentLogin(event) {
+  event.preventDefault();
+  const no = document.getElementById('inputNo').value.trim();
+  const errorMsg = document.getElementById('loginErrorMsg');
+  const submitBtn = document.getElementById('submitLoginBtn');
 
-    if (found) {
-        if (errorEl) errorEl.classList.add('hidden');
-        tempSelectedStudent = found;
-        
-        const avatarEl = document.getElementById('confirm-avatar');
-        const badgeEl = document.getElementById('confirm-no-badge');
-        const nameEl = document.getElementById('confirm-name');
-        const classEl = document.getElementById('confirm-class');
+  submitBtn.disabled = true;
+  submitBtn.innerText = "กำลังตรวจสอบ...";
+  errorMsg.classList.add('hidden');
 
-        if (avatarEl) avatarEl.textContent = found.no;
-        if (badgeEl) badgeEl.textContent = `เลขที่ ${found.no}`;
-        if (nameEl) nameEl.textContent = found.name;
-        if (classEl) classEl.textContent = `ชั้น ${found.class}`;
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?no=${encodeURIComponent(no)}`);
+    const result = await response.json();
 
-        showState('confirm-student-state');
+    if (result.success) {
+      // บันทึกข้อมูลนักเรียนลง localStorage
+      localStorage.setItem("currentStudent", JSON.stringify(result.data));
+      closeLoginModal();
+      checkLoginStatus(); // อัปเดตชื่อขึ้นแถบด้านบนขวาทันที
     } else {
-        if (errorEl) {
-            errorEl.textContent = `ไม่พบข้อมูลเลขที่ ${noInput} (ลองเลขที่ 1, 2, 3 หรือ 15)`;
-            errorEl.classList.remove('hidden');
-        }
+      errorMsg.textContent = result.message || "ไม่พบข้อมูลนักเรียนเลขที่นี้";
+      errorMsg.classList.remove('hidden');
     }
+  } catch (error) {
+    console.error("Login error:", error);
+    errorMsg.textContent = "เชื่อมต่อระบบฐานข้อมูลไม่สำเร็จ";
+    errorMsg.classList.remove('hidden');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "เข้าสู่ระบบ";
+  }
 }
 
-// ย้อนกลับไปค้นหาใหม่
-function backToSearch() {
-    tempSelectedStudent = null;
-    showState('login-form-state');
-}
-
-// ยืนยันเข้าสู่ระบบ (ไม่มี alert)
-function confirmLogin() {
-    if (!tempSelectedStudent) return;
-
-    localStorage.setItem('currentStudent', JSON.stringify(tempSelectedStudent));
-    checkLoginStatus();
-    toggleProfileModal(); // ปิด Modal ทันที
-}
-
-// ออกจากระบบ
-function logoutStudent() {
-    localStorage.removeItem('currentStudent');
-    checkLoginStatus();
-    showState('login-form-state');
-}
-
-// เช็กสถานะและอัปเดตชื่อผู้เรียนบน Header
+// 5. แสดงชื่อ-นามสกุล และเลขที่บนแถบด้านบน
 function checkLoginStatus() {
-    const currentStudent = JSON.parse(localStorage.getItem('currentStudent') || 'null');
-    const statusDot = document.getElementById('user-status-dot');
-    const userText = document.getElementById('current-user-text');
+  const savedStudent = localStorage.getItem("currentStudent");
+  const userText = document.getElementById('current-user-text');
+  const statusDot = document.getElementById('user-status-dot');
 
-    if (currentStudent) {
-        if (statusDot) statusDot.className = "absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white";
-        if (userText) userText.textContent = `${currentStudent.name} (เลขที่ ${currentStudent.no})`; // แสดงชื่อผู้เรียนและเลขที่
-    } else {
-        if (statusDot) statusDot.className = "absolute top-1 right-1 w-2.5 h-2.5 bg-slate-400 rounded-full border-2 border-white";
-        if (userText) userText.textContent = "ยังไม่ได้เข้าสู่ระบบ"; // แสดงข้อความเมื่อยังไม่ได้เข้าสู่ระบบ
+  if (savedStudent) {
+    const student = JSON.parse(savedStudent);
+    // ดึงชื่อสกุล (คอลัมน์ C จาก Google Sheets)
+    const displayName = student.fullName || student.name || "นักเรียน";
+    if (userText) {
+      userText.textContent = `${displayName} (เลขที่ ${student.no})`;
     }
+    if (statusDot) {
+      statusDot.className = "absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white";
+    }
+  } else {
+    if (userText) {
+      userText.textContent = "ยังไม่ได้เข้าสู่ระบบ";
+    }
+    if (statusDot) {
+      statusDot.className = "absolute top-1 right-1 w-2.5 h-2.5 bg-slate-400 rounded-full border-2 border-white";
+    }
+  }
+}
+
+// 6. ออกจากระบบ
+function logoutStudent() {
+  localStorage.removeItem("currentStudent");
+  checkLoginStatus();
 }
 
 // Smooth Scroll ไปยังส่วนที่เลือก

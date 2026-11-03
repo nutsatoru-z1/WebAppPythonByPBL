@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบทดสอบเก็บคะแนน บทที่ 1 - วิชาวิทยาการคำนวณ ม.2</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="icon" type="image/png" href="../img/title.png">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- HEADER NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="lesson1.html"
+                    class="flex items-center space-x-3 text-slate-800 hover:text-brand-600 transition">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-teal-50 text-brand-600 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-bold text-base block leading-tight">กลับหน้าบทเรียนที่ 1</span>
+                        <span class="text-xs text-slate-400">การแบ่งปัญหาใหญ่เป็นปัญหาย่อย</span>
+                    </div>
+                </a>
+
+                <!-- ข้อมูลผู้เรียนที่ล็อกอินไว้ -->
+                <div
+                    class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-heading">
+                    <i class="fa-solid fa-circle-user text-brand-600"></i>
+                    <span id="student-info-display" class="font-bold text-slate-700">กำลังตรวจสอบข้อมูล...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN QUIZ CONTENT -->
+    <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto space-y-6">
+
+            <!-- QUIZ HEADER BANNER -->
+            <div
+                class="bg-gradient-to-r from-teal-600 to-brand-600 text-white rounded-3xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
+                <div class="relative z-10 space-y-2">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm text-white">
+                        <i class="fa-solid fa-file-signature"></i> แบบทดสอบท้ายบทเรียน
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-bold font-heading">แบบทดสอบเก็บคะแนน บทที่ 1</h1>
+                    <p class="text-teal-100 text-xs sm:text-sm font-light leading-relaxed">
+                        การแบ่งปัญหาใหญ่เป็นปัญหาย่อย (Decomposition) • ทั้งหมด 10 ข้อ (10 คะแนน)
+                    </p>
+                </div>
+                <i
+                    class="fa-solid fa-puzzle-piece absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12 pointer-events-none"></i>
+            </div>
+
+            <!-- QUIZ FORM -->
+            <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-6">
+                <div id="questions-container" class="space-y-6">
+                    <!-- คำถาม 10 ข้อจะถูก Render ด้วย JavaScript -->
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="pt-4 text-center">
+                    <button type="submit" id="btn-submit"
+                        class="px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold font-heading text-sm rounded-2xl shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>ส่งคำตอบและบันทึกคะแนน</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- RESULT CARD (HIDDEN INITIALLY) -->
+            <div id="result-box"
+                class="hidden bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-5 animate-fade-in">
+                <div id="score-icon"
+                    class="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl shadow-inner">
+                    <!-- Icon render dynamically -->
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold font-heading text-slate-800" id="result-title">ผลการทดสอบ</h3>
+                    <p class="text-slate-500 text-sm mt-1" id="result-subtitle">คุณทำคะแนนได้</p>
+                </div>
+                <div class="py-3 px-6 bg-slate-50 rounded-2xl inline-block border border-slate-100">
+                    <span id="score-number" class="text-4xl font-extrabold font-heading text-brand-600">0</span>
+                    <span class="text-slate-400 font-bold text-xl"> / 10 คะแนน</span>
+                </div>
+                <p id="result-message" class="text-xs sm:text-sm text-slate-600 font-light"></p>
+
+                <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button onclick="location.reload()"
+                        class="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> ทำใหม่อีกครั้ง
+                    </button>
+                    <a href="lesson1.html"
+                        class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-house mr-1"></i> กลับหน้าบทเรียนที่ 1
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 text-slate-400 text-center text-xs mt-12">
+        <p>© 2026 Computing Science Grade 8 - Bus Fare System Case Study</p>
+    </footer>
+
+    <script>
+        // ข้อมูลแบบทดสอบ 10 ข้อที่เกี่ยวข้องกับเนื้อหาบทที่ 1 โดยตรง
+        const quizData = [
+            {
+                q: "1. การแบ่งปัญหาใหญ่เป็นปัญหาย่อย (Decomposition) มีจุดประสงค์หลักเพื่ออะไร?",
+                options: [
+                    "เพื่อทำให้ปัญหามีความซับซ้อนและน่าตื่นเต้นมากขึ้น",
+                    "เพื่อย่อยปัญหาที่ซับซ้อนออกเป็นส่วนย่อยๆ ให้จัดการและแก้ไขได้ง่ายขึ้น",
+                    "เพื่อตัดขั้นตอนการเขียนโปรแกรมทิ้งไปทั้งหมด",
+                    "เพื่อหาผู้รับผิดชอบงานเพียงคนเดียวในการแก้ปัญหา"
+                ],
+                answer: 1
+            },
+            {
+                q: "2. หากต้องการย่อยระบบการทำงานของ 'จักรยาน' องค์ประกอบในข้อใดจัดเป็นส่วนประกอบย่อยของระบบขับเคลื่อน?",
+                options: [
+                    "เบาะนั่งและแฮนด์รถ",
+                    "โซ่ เฟือง และจานโซ่",
+                    "กระดิ่งและกระจกมองข้าง",
+                    "ขาตั้งจักรยานและที่ใส่กระติกน้ำ"
+                ],
+                answer: 1
+            },
+            {
+                q: "3. ในกรณีศึกษา 'ระบบตั๋วรถเมล์อัตโนมัติ' ข้อใดไม่ใช่ปัญหาย่อยที่ต้องวิเคราะห์?",
+                options: [
+                    "การคำนวณราคาค่าโดยสารตามระยะทาง",
+                    "การรับเหรียญหรือธนบัตรและการทอนเงิน",
+                    "การตรวจสภาพเครื่องยนต์และลมยางของรถเมล์",
+                    "การพิมพ์ตั๋วหรือบันทึกข้อมูลการเดินทาง"
+                ],
+                answer: 2
+            },
+            {
+                q: "4. เมื่อเจอปัญหา 'เครื่องจำหน่ายตั๋วรถเมล์ไม่ยอมออกตั๋ว' ขั้นตอนแรกตามแนวคิด Decomposition ควรทำอย่างไร?",
+                options: [
+                    "ทุบตู้ทันทีเพื่อให้เครื่องทำงาน",
+                    "ซื้อเครื่องจำหน่ายตั๋วใหม่มาเปลี่ยนทั้งระบบ",
+                    "แยกตรวจสอบส่วนย่อย เช่น ตรวจระบบกระดาษพิมพ์, ระบบตัดเงิน, หรือระบบเซนเซอร์",
+                    "ยกเลิกการเดินรถเมล์ทั้งสาย"
+                ],
+                answer: 2
+            },
+            {
+                q: "5. ข้อใดแสดงการประยุกต์ใช้แนวคิด Decomposition ในชีวิตประจำวันได้ชัดเจนที่สุด?",
+                options: [
+                    "การแบ่งขั้นตอนการทำความสะอาดบ้านออกเป็นห้องนอน ห้องน้ำ ห้องครัว",
+                    "การทำความสะอาดบ้านทั้งหมดพร้อมกันภายใน 1 วินาที",
+                    "การปล่อยให้บ้านรกโดยไม่จัดระเบียบ",
+                    "การเลือกซื้อบ้านหลังใหม่แทนการทำความสะอาด"
+                ],
+                answer: 0
+            },
+            {
+                q: "6. ในการแบ่งปัญหาใหญ่เป็นปัญหาย่อย ข้อควรระวังที่สำคัญที่สุดคือข้อใด?",
+                options: [
+                    "ปัญหาย่อยต้องเชื่อมโยงกลับไปแก้ปัญหาใหญ่ดั้งเดิมได้",
+                    "ต้องแบ่งให้ได้ไม่ต่ำกว่า 100 ปัญหาย่อยเสมอ",
+                    "ห้ามให้ผู้อื่นในทีมช่วยทำงานในปัญหาย่อย",
+                    "ปัญหาย่อยต้องไม่เกี่ยวข้องกับปัญหาใหญ่เลย"
+                ],
+                answer: 0
+            },
+            {
+                q: "7. หากนักเรียนต้องการสร้าง 'เกม AR จับคู่ชิ้นส่วนจักรยาน' การแบ่งงานย่อยในข้อใดเหมาะสมที่สุด?",
+                options: [
+                    "เขียนโค้ดทั้งหมดในบรรทัดเดียวให้เสร็จ",
+                    "แยกส่วน: 1) ระบบเปิดกล้อง 2) ระบบตรวจจับมือ 3) ระบบคะแนน 4) กราฟิกชิ้นส่วน",
+                    "รอกราฟิกเสร็จก่อนค่อยเริ่มคิดว่าเกมจะเล่นอย่างไร",
+                    "ตัดส่วนกล้องและโมเดลทิ้งเพื่อความง่าย"
+                ],
+                answer: 1
+            },
+            {
+                q: "8. 'การคิดค่าโดยสารตามระยะทาง' และ 'การคิดส่วนลดสำหรับนักเรียน' จัดเป็นปัญหาย่อยในหมวดหมู่ใด?",
+                options: [
+                    "โครงสร้างเชิงกายภาพภายนอกของตัวรถ",
+                    "ขั้นตอนวิธีและตรรกะการคำนวณทางคณิตศาสตร์ (Logic & Fare Calculation)",
+                    "ระบบช่วงล่างและการเบรกของรถยนต์",
+                    "การประชาสัมพันธ์และป้ายโฆษณาข้างตัวรถ"
+                ],
+                answer: 1
+            },
+            {
+                q: "9. ประโยชน์ของการแบ่งปัญหาย่อยต่องานที่ทำเป็นทีมคืออะไร?",
+                options: [
+                    "ทำให้สามารถแบ่งหน้าที่ให้สมาชิกในทีมทำพร้อมๆ กันได้ตามความถนัด",
+                    "ทำให้ทุกคนเกี่ยงงานกันได้ง่ายขึ้น",
+                    "ทำให้หัวหน้ากลุ่มต้องทำงานคนเดียวทั้งหมด",
+                    "ทำให้งานเสร็จช้ากว่าการทำคนเดียวเสมอ"
+                ],
+                answer: 0
+            },
+            {
+                q: "10. หลังจากย่อยปัญหาใหญ่และแก้ไขปัญหาย่อยทุกส่วนเสร็จสิ้นแล้ว ขั้นตอนถัดไปคืออะไร?",
+                options: [
+                    "ละทิ้งผลลัพธ์ย่อยทั้งหมดและเริ่มนับหนึ่งใหม่",
+                    "นำผลลัพธ์ของแต่ละส่วนย่อยมาประกอบรวมกันเพื่อแก้ปัญหาใหญ่ทั้งระบบ",
+                    "หยุดการทำงานทันทีโดยไม่ต้องทดสอบระบบรวม",
+                    "เปลี่ยนไปทำปัญหาอื่นโดยไม่ต้องตรวจสอบความถูกต้อง"
+                ],
+                answer: 1
+            }
+        ];
+
+        // โหลดข้อมูลนักเรียนและสร้างฟอร์ม
+        document.addEventListener("DOMContentLoaded", () => {
+            const studentData = localStorage.getItem("currentStudent");
+            const infoDisplay = document.getElementById("student-info-display");
+
+            if (studentData) {
+                const s = JSON.parse(studentData);
+                const name = s.fullName || s.name || "นักเรียน";
+                infoDisplay.textContent = `${name} (เลขที่ ${s.no})`;
+            } else {
+                infoDisplay.textContent = "ยังไม่ได้เข้าสู่ระบบ (กรุณาล็อกอิน)";
+                infoDisplay.classList.add("text-rose-500");
+            }
+
+            renderQuestions();
+        });
+
+        // ฟังก์ชันสร้างคำถามในหน้าเว็บ
+        function renderQuestions() {
+            const container = document.getElementById("questions-container");
+            container.innerHTML = quizData.map((item, qIdx) => `
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm sm:text-base font-heading leading-relaxed">
+                        ${item.q}
+                    </h3>
+                    <div class="space-y-2.5">
+                        ${item.options.map((opt, oIdx) => `
+                            <label class="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition select-none group has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50/50">
+                                <input type="radio" name="q_${qIdx}" value="${oIdx}" required 
+                                    class="w-4 h-4 text-brand-600 focus:ring-brand-500 border-slate-300">
+                                <span class="text-xs sm:text-sm text-slate-700 font-light group-has-[:checked]:font-medium group-has-[:checked]:text-brand-900">
+                                    ${opt}
+                                </span>
+                            </label>
+                        `).join("")}
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // ส่งแบบทดสอบและตรวจคะแนน
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoX6QMNNWi6THvdH-7SH7TZJPBIOC3lwQxAmA8p2R7YySFVzv4R69iIfZhDftaxnAzKg/exec";
+
+        async function submitQuiz(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById("btn-submit");
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึกคะแนน...';
+
+            const choiceLabels = ["ก", "ข", "ค", "ง"];
+            let score = 0;
+            let studentAnswers = []; // เก็บประวัติการตอบรายข้อ
+
+            quizData.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
+                if (selected) {
+                    const chosenIndex = parseInt(selected.value);
+                    const isCorrect = chosenIndex === item.answer;
+                    if (isCorrect) score++;
+
+                    // รูปแบบที่บันทึก เช่น "ข (ถูก)" หรือ "ก (ผิด)"
+                    studentAnswers.push(`${choiceLabels[chosenIndex]} (${isCorrect ? 'ถูก' : 'ผิด'})`);
+                } else {
+                    studentAnswers.push("ไม่ระบุ");
+                }
+            });
+
+            // ดึงข้อมูลผู้เรียนจาก LocalStorage
+            const studentData = localStorage.getItem("currentStudent");
+            let student = { no: "-", studentId: "-", fullName: "บุคคลทั่วไป" };
+            if (studentData) {
+                student = JSON.parse(studentData);
+            }
+
+            // ส่งคะแนนและคำตอบแยกข้อไปยัง Google Sheets
+            try {
+                const params = new URLSearchParams({
+                    action: "saveScore",
+                    no: student.no,
+                    studentId: student.studentId || "",
+                    fullName: student.fullName || student.name || "",
+                    lesson: "บทที่ 1 การแบ่งปัญหาย่อย",
+                    answers: studentAnswers.join(","), // ส่งคำตอบ 10 ข้อคั่นด้วย comma
+                    score: score
+                });
+
+                await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, { mode: 'no-cors' });
+            } catch (err) {
+                console.error("บันทึกข้อมูลไม่สำเร็จ:", err);
+            }
+
+            // แสดงหน้าสรุปผลคะแนน
+            document.getElementById("quiz-form").classList.add("hidden");
+            const resultBox = document.getElementById("result-box");
+            resultBox.classList.remove("hidden");
+
+            const scoreNumber = document.getElementById("score-number");
+            const scoreIcon = document.getElementById("score-icon");
+            const resultTitle = document.getElementById("result-title");
+            const resultMsg = document.getElementById("result-message");
+
+            scoreNumber.textContent = score;
+
+            if (score >= 8) {
+                scoreIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl shadow-inner bg-emerald-100 text-emerald-600";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                resultTitle.textContent = "ยอดเยี่ยมมาก!";
+            } else if (score >= 5) {
+                scoreIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl shadow-inner bg-amber-100 text-amber-600";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-medal"></i>';
+                resultTitle.textContent = "ผ่านเกณฑ์การประเมิน";
+            } else {
+                scoreIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl shadow-inner bg-rose-100 text-rose-600";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+                resultTitle.textContent = "ควรทบทวนบทเรียนเพิ่มเติม";
+            }
+
+            resultMsg.textContent = `บันทึกคำตอบและคะแนนของ ${student.fullName || student.name} (เลขที่ ${student.no}) เรียบร้อยแล้ว`;
+            window.scrollTo({ top: resultBox.offsetTop - 100, behavior: "smooth" });
+        }
+    </script>
+</body>
+
+</html>

@@ -29,6 +29,7 @@
             }
         }
     </script>
+    <link rel="icon" type="image/png" href="../img/title.png">
 
     <!-- Google Fonts & FontAwesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,24 +71,26 @@
                         class="nav-item text-brand-600 font-semibold flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-brand-50 border border-brand-100 transition-all hover:bg-brand-100">
                         <i class="fa-solid fa-pen-to-square"></i> แบบทดสอบก่อนเรียน
                     </a>
-                    <a href="https://forms.gle/yRX7RqqWWefyMT729" target="_blank" rel="noopener noreferrer" id="nav-posttest"
+                    <a href="https://forms.gle/yRX7RqqWWefyMT729" target="_blank" rel="noopener noreferrer"
+                        id="nav-posttest"
                         class="nav-item text-brand-600 font-semibold flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-brand-50 border border-brand-100 transition-all hover:bg-brand-100">
                         <i class="fa-solid fa-square-check"></i> แบบทดสอบหลังเรียน
-                        </a>
+                    </a>
                 </nav>
 
 
 
                 <!-- Student Login / Profile Button (ไม่มี Progress Bar แล้ว) -->
-                <div class="flex items-center gap-3">
+                <!-- Student Login / Profile Button เดิม -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="handleProfileClick()">
                     <div id="user-display-name" class="hidden sm:flex flex-col items-end text-xs">
                         <span class="text-slate-400 font-light">ผู้เรียนเข้าใช้งาน:</span>
                         <span id="current-user-text"
                             class="font-bold text-slate-800 font-heading">ยังไม่ได้เข้าสู่ระบบ</span>
                     </div>
 
-                    <button onclick="toggleProfileModal()"
-                        class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors relative cursor-pointer"
+                    <button type="button"
+                        class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors relative pointer-events-none"
                         title="โปรไฟล์ / เข้าสู่ระบบ">
                         <i class="fa-solid fa-user-graduate text-base"></i>
                         <span id="user-status-dot"
@@ -286,6 +289,8 @@
         </section>
 
 
+
+
     </main>
 
     <!-- FOOTER -->
@@ -295,96 +300,45 @@
         </div>
     </footer>
 
-    <!-- STUDENT LOGIN & CONFIRMATION MODAL -->
-    <div id="profile-modal"
-        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl border border-slate-100 relative">
 
-            <!-- ปุ่มปิด Modal -->
-            <button onclick="toggleProfileModal()"
-                class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
 
-            <!-- STATE 1: ฟอร์มค้นหาด้วยเลขที่ -->
-            <div id="login-form-state">
-                <div class="text-center mb-5">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                    <h4 class="font-heading font-bold text-lg text-slate-900">เข้าสู่ระบบผู้เรียน</h4>
-                    <p class="text-xs text-slate-500 font-light mt-0.5">กรอกเลขที่เพื่อยืนยันตัวตนและบันทึกคะแนน</p>
-                </div>
+    <!-- กล่องป๊อปอัปเข้าสู่ระบบ (Login Modal) -->
+    <div id="loginModal"
+        class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div
+            class="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-100 text-center space-y-4">
 
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1.5">เลขที่ของคุณ:</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-                                <i class="fa-solid fa-hashtag text-xs"></i>
-                            </span>
-                            <input type="number" id="student-no-input" min="1" max="50" required
-                                placeholder="เช่น 1 หรือ 15"
-                                class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
-                        </div>
-                        <!-- ข้อความแจ้งเตือนเมื่อค้นหาไม่พบ -->
-                        <p id="search-error-msg" class="text-xs text-red-500 font-medium mt-1.5 hidden"></p>
-                    </div>
-
-                    <button type="button" onclick="searchStudent(event)"
-                        class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-heading text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md shadow-brand-500/20">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                        <span>ค้นหาข้อมูล</span>
-                    </button>
-                </div>
+            <div
+                class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl mx-auto">
+                <i class="fa-solid fa-id-card"></i>
             </div>
 
-            <!-- STATE 2: ยืนยันข้อมูลนักเรียน -->
-            <div id="confirm-student-state" class="hidden">
-                <div class="text-center mb-5">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-brand-600 border-2 border-brand-500 flex items-center justify-center text-2xl mx-auto mb-2 font-bold shadow-sm"
-                        id="confirm-avatar"></div>
-                    <span
-                        class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-100"
-                        id="confirm-no-badge">เลขที่ -</span>
-                    <h4 class="font-heading font-bold text-lg text-slate-900 mt-2" id="confirm-name">ชื่อ - นามสกุล</h4>
-                    <p class="text-xs text-slate-500 font-medium" id="confirm-class">ชั้นมัธยมศึกษาปีที่ 2</p>
-                </div>
-
-                <div class="flex gap-2">
-                    <button type="button" onclick="backToSearch()"
-                        class="w-1/3 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition-colors">
-                        เปลี่ยนเลขที่
-                    </button>
-                    <button type="button" onclick="confirmLogin()"
-                        class="w-2/3 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-heading text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>ยืนยันเข้าสู่ระบบ</span>
-                    </button>
-                </div>
+            <div>
+                <h3 class="text-base font-bold text-slate-800">เข้าสู่ระบบนักเรียน</h3>
+                <p class="text-xs text-slate-400">กรอกเลขที่เพื่อยืนยันตัวตน</p>
             </div>
 
-            <!-- STATE 3: เมื่อยืนยันและเข้าสู่ระบบแล้ว -->
-            <div id="logged-in-state" class="hidden">
-                <div class="text-center mb-5">
-                    <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-2xl mx-auto mb-2 font-bold shadow-sm"
-                        id="logged-avatar"></div>
-                    <div class="flex items-center justify-center gap-1.5 mt-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span class="text-[11px] font-bold text-emerald-600">ยืนยันตัวตนเรียบร้อย</span>
-                    </div>
-                    <h4 class="font-heading font-bold text-lg text-slate-900 mt-1" id="logged-name">ชื่อ - นามสกุล</h4>
-                    <p class="text-xs text-slate-500" id="logged-info">เลขที่ - | ม.2</p>
+            <form onsubmit="handleStudentLogin(event)" class="space-y-3">
+                <div class="text-left">
+                    <label class="text-[11px] font-bold text-slate-600 ml-1">เลขที่ของนักเรียน</label>
+                    <input type="number" id="inputNo" min="1" max="60" required placeholder="กรอกเลขที่ เช่น 1, 2, 15"
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 font-mono">
                 </div>
 
-                <button type="button" onclick="logoutStudent()"
-                    class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>ออกจากระบบ / สลับบัญชี</span>
-                </button>
-            </div>
+                <!-- กล่องแสดงข้อความแจ้งเตือน / แสดงสถานะชื่อ -->
+                <p id="loginErrorMsg" class="text-xs text-rose-500 font-medium hidden"></p>
 
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeLoginModal()"
+                        class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition cursor-pointer">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" id="submitLoginBtn"
+                        class="w-1/2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer">
+                        เข้าสู่ระบบ
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
