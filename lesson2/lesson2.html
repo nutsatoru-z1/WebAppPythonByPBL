@@ -86,7 +86,6 @@
     <!-- MAIN CONTENT AREA -->
     <main class="flex-grow py-8 lg:py-12 relative z-10">
         <div class="max-w-[90rem] mx-auto px-4 sm:px-8 lg:px-12 space-y-10">
-
             <!-- SECTION 1: LEARNING OBJECTIVES -->
             <section class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm">
                 <div class="max-w-4xl">
@@ -113,6 +112,103 @@
                             <span>มีความมุ่งมั่นและแก้ปัญหาอย่างเป็นขั้นตอนผ่านกิจกรรม Interactive</span>
                         </li>
                     </ul>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ส่วนที่ 2: แนะนำเนื้อหาและเป้าหมายการเรียนรู้ -->
+            <!-- ============================================== -->
+            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <span>1. ความหมายของขั้นตอนวิธี (Algorithm)</span>
+                </div>
+                <p class="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+                    <strong>ขั้นตอนวิธี (Algorithm)</strong> คือ ชุดของลำดับขั้นตอนคำสั่งที่ชัดเจน เป็นขั้นเป็นตอน
+                    และสามารถปฏิบัติตามได้จริง เพื่อนำไปสู่ผลลัพธ์หรือการแก้ปัญหาที่ต้องการ
+                    ไม่ว่าจะเป็นการแก้ปัญหาในชีวิตประจำวันหรือการสั่งให้คอมพิวเตอร์ประมวลผล
+                </p>
+
+                <!-- คุณสมบัติของขั้นตอนวิธีที่ดี -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-check-double"></i> ชัดเจน ไม่กำกวม
+                        </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            แต่ละขั้นตอนต้องสื่อความหมายเดียว ไม่คลุมเครือ เพื่อให้ใครนำไปทำตามก็ได้ผลลัพธ์เหมือนกัน
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-arrow-down-1-9"></i> มีลำดับที่แน่นอน
+                        </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            ขั้นตอนต้องเรียงลำดับจากจุดเริ่มต้น มีการประมวลผลที่ต่อเนื่อง และมีจุดสิ้นสุดที่ชัดเจน
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-bullseye"></i> ได้ผลลัพธ์ถูกต้อง
+                        </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            เมื่อปฏิบัติตามครบทุกขั้นตอน จะต้องได้ผลลัพธ์หรือคำตอบที่ตอบสนองต่อเป้าหมายของปัญหา
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- ส่วนที่ 3: โครงสร้างหลักของการเขียนผังงาน 3 รูปแบบ -->
+            <!-- ============================================== -->
+            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <span>2. โครงสร้างควบคุมของผังงาน (Control Structures)</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 1. ลำดับ -->
+                    <div
+                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">แบบที่
+                            1</span>
+                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบลำดับ (Sequence)</h4>
+                        <p class="text-xs text-slate-500 font-light leading-relaxed">
+                            การทำงานเรียงจากขั้นตอนบนลงล่างทีละขั้นตอนตามลำดับ ไม่มีการข้ามหรือย้อนกลับ เช่น
+                            การใช้ตู้โทรศัพท์ หรือการปลูกต้นไม้
+                        </p>
+                    </div>
+
+                    <!-- 2. ทางเลือก -->
+                    <div
+                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">แบบที่
+                            2</span>
+                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบมีทางเลือก (Selection)</h4>
+                        <p class="text-xs text-slate-500 font-light leading-relaxed">
+                            การตรวจสอบเงื่อนไข หากเป็นจริงทำขั้นตอนหนึ่ง หากเป็นเท็จทำอีกขั้นตอนหนึ่ง เช่น
+                            การตรวจว่ามีแสตมป์ติดจดหมายหรือไม่
+                        </p>
+                    </div>
+
+                    <!-- 3. ทำซ้ำ -->
+                    <div
+                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">แบบที่
+                            3</span>
+                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบทำซ้ำ (Iteration / Loop)</h4>
+                        <p class="text-xs text-slate-500 font-light leading-relaxed">
+                            การทำงานขั้นตอนเดิมซ้ำๆ จนกว่าเงื่อนไขที่กำหนดจะบรรลุผลหรือเป็นเท็จ เช่น
+                            การหยอดเหรียญซ้ำจนกว่าจะครบตามจำนวนราคาตั๋ว
+                        </p>
+                    </div>
                 </div>
             </section>
 
