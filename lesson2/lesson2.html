@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>วิชาวิทยาการคำนวณ ม.2</title>
+    <title>วิชาวิทยาการคำนวณ ม.3</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -112,103 +112,6 @@
                             <span>มีความมุ่งมั่นและแก้ปัญหาอย่างเป็นขั้นตอนผ่านกิจกรรม Interactive</span>
                         </li>
                     </ul>
-                </div>
-            </section>
-
-            <!-- ============================================== -->
-            <!-- ส่วนที่ 2: แนะนำเนื้อหาและเป้าหมายการเรียนรู้ -->
-            <!-- ============================================== -->
-            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
-                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
-                    <div
-                        class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-lightbulb"></i>
-                    </div>
-                    <span>1. ความหมายของขั้นตอนวิธี (Algorithm)</span>
-                </div>
-                <p class="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
-                    <strong>ขั้นตอนวิธี (Algorithm)</strong> คือ ชุดของลำดับขั้นตอนคำสั่งที่ชัดเจน เป็นขั้นเป็นตอน
-                    และสามารถปฏิบัติตามได้จริง เพื่อนำไปสู่ผลลัพธ์หรือการแก้ปัญหาที่ต้องการ
-                    ไม่ว่าจะเป็นการแก้ปัญหาในชีวิตประจำวันหรือการสั่งให้คอมพิวเตอร์ประมวลผล
-                </p>
-
-                <!-- คุณสมบัติของขั้นตอนวิธีที่ดี -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
-                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
-                            <i class="fa-solid fa-check-double"></i> ชัดเจน ไม่กำกวม
-                        </div>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            แต่ละขั้นตอนต้องสื่อความหมายเดียว ไม่คลุมเครือ เพื่อให้ใครนำไปทำตามก็ได้ผลลัพธ์เหมือนกัน
-                        </p>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
-                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
-                            <i class="fa-solid fa-arrow-down-1-9"></i> มีลำดับที่แน่นอน
-                        </div>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            ขั้นตอนต้องเรียงลำดับจากจุดเริ่มต้น มีการประมวลผลที่ต่อเนื่อง และมีจุดสิ้นสุดที่ชัดเจน
-                        </p>
-                    </div>
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
-                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
-                            <i class="fa-solid fa-bullseye"></i> ได้ผลลัพธ์ถูกต้อง
-                        </div>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            เมื่อปฏิบัติตามครบทุกขั้นตอน จะต้องได้ผลลัพธ์หรือคำตอบที่ตอบสนองต่อเป้าหมายของปัญหา
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============================================== -->
-            <!-- ส่วนที่ 3: โครงสร้างหลักของการเขียนผังงาน 3 รูปแบบ -->
-            <!-- ============================================== -->
-            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
-                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
-                    <div
-                        class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-network-wired"></i>
-                    </div>
-                    <span>2. โครงสร้างควบคุมของผังงาน (Control Structures)</span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- 1. ลำดับ -->
-                    <div
-                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
-                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">แบบที่
-                            1</span>
-                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบลำดับ (Sequence)</h4>
-                        <p class="text-xs text-slate-500 font-light leading-relaxed">
-                            การทำงานเรียงจากขั้นตอนบนลงล่างทีละขั้นตอนตามลำดับ ไม่มีการข้ามหรือย้อนกลับ เช่น
-                            การใช้ตู้โทรศัพท์ หรือการปลูกต้นไม้
-                        </p>
-                    </div>
-
-                    <!-- 2. ทางเลือก -->
-                    <div
-                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
-                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">แบบที่
-                            2</span>
-                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบมีทางเลือก (Selection)</h4>
-                        <p class="text-xs text-slate-500 font-light leading-relaxed">
-                            การตรวจสอบเงื่อนไข หากเป็นจริงทำขั้นตอนหนึ่ง หากเป็นเท็จทำอีกขั้นตอนหนึ่ง เช่น
-                            การตรวจว่ามีแสตมป์ติดจดหมายหรือไม่
-                        </p>
-                    </div>
-
-                    <!-- 3. ทำซ้ำ -->
-                    <div
-                        class="p-4 rounded-2xl border border-slate-200 space-y-2 bg-gradient-to-b from-white to-slate-50">
-                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">แบบที่
-                            3</span>
-                        <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบทำซ้ำ (Iteration / Loop)</h4>
-                        <p class="text-xs text-slate-500 font-light leading-relaxed">
-                            การทำงานขั้นตอนเดิมซ้ำๆ จนกว่าเงื่อนไขที่กำหนดจะบรรลุผลหรือเป็นเท็จ เช่น
-                            การหยอดเหรียญซ้ำจนกว่าจะครบตามจำนวนราคาตั๋ว
-                        </p>
-                    </div>
                 </div>
             </section>
 
@@ -350,59 +253,136 @@
                 </div>
             </section>
 
-            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
-                <div class="flex items-center gap-2.5 text-slate-800 font-bold font-heading text-base sm:text-lg">
+            <!-- ============================================== -->
+            <!-- ส่วนที่ 2: แนะนำเนื้อหาและเป้าหมายการเรียนรู้ -->
+            <!-- ============================================== -->
+            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
                     <div
-                        class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-diagram-project"></i>
+                        class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-lightbulb"></i>
                     </div>
-                    <span>ตัวอย่างผังงานและขั้นตอนวิธี (Flowchart Examples)</span>
+                    <span>1. ความหมายของขั้นตอนวิธี (Algorithm)</span>
                 </div>
-
-                <!-- Grid แสดงภาพตัวอย่างผังงาน 3 ภาพเรียงกันอย่างเป็นระเบียบ -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-
-                    <!-- ตัวอย่างที่ 1: ผังงานการใช้ตู้โทรศัพท์ -->
-                    <div
-                        class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center shadow-sm">
-                        <span
-                            class="text-xs font-bold text-slate-600 mb-3 bg-white px-3 py-1 rounded-full border border-slate-200">
-                            ตัวอย่างที่ 1: การใช้ตู้โทรศัพท์
-                        </span>
-                        <div class="w-full flex justify-center bg-white rounded-xl p-2 border border-slate-100">
-                            <img src="../img/exalgorithm.png" alt="ผังงานการใช้ตู้โทรศัพท์"
-                                class="max-h-[380px] w-auto object-contain rounded-lg">
+                <p class="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+                    <strong>ขั้นตอนวิธี (Algorithm)</strong> คือ ชุดของลำดับขั้นตอนคำสั่งที่ชัดเจน เป็นขั้นเป็นตอน
+                    และสามารถปฏิบัติตามได้จริง เพื่อนำไปสู่ผลลัพธ์หรือการแก้ปัญหาที่ต้องการ
+                    ไม่ว่าจะเป็นการแก้ปัญหาในชีวิตประจำวันหรือการสั่งให้คอมพิวเตอร์ประมวลผล
+                </p>
+                <!-- คุณสมบัติของขั้นตอนวิธีที่ดี -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-check-double"></i> ชัดเจน ไม่กำกวม
                         </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            แต่ละขั้นตอนต้องสื่อความหมายเดียว ไม่คลุมเครือ เพื่อให้ใครนำไปทำตามก็ได้ผลลัพธ์เหมือนกัน
+                        </p>
                     </div>
-
-                    <!-- ตัวอย่างที่ 2: ผังงานการปลูกต้นไม้ -->
-                    <div
-                        class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center shadow-sm">
-                        <span
-                            class="text-xs font-bold text-slate-600 mb-3 bg-white px-3 py-1 rounded-full border border-slate-200">
-                            ตัวอย่างที่ 2: ขั้นตอนการปลูกต้นไม้
-                        </span>
-                        <div class="w-full flex justify-center bg-white rounded-xl p-2 border border-slate-100">
-                            <img src="../img/exalgorithm2.jpg" alt="ผังงานขั้นตอนการปลูกต้นไม้"
-                                class="max-h-[380px] w-auto object-contain rounded-lg">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-arrow-down-1-9"></i> มีลำดับที่แน่นอน
                         </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            ขั้นตอนต้องเรียงลำดับจากจุดเริ่มต้น มีการประมวลผลที่ต่อเนื่อง และมีจุดสิ้นสุดที่ชัดเจน
+                        </p>
                     </div>
-
-                    <!-- ตัวอย่างที่ 3: ผังงานการส่งจดหมาย -->
-                    <div
-                        class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center shadow-sm">
-                        <span
-                            class="text-xs font-bold text-slate-600 mb-3 bg-white px-3 py-1 rounded-full border border-slate-200">
-                            ตัวอย่างที่ 3: ผังงานการส่งจดหมาย
-                        </span>
-                        <div class="w-full flex justify-center bg-white rounded-xl p-2 border border-slate-100">
-                            <img src="../img/exalgorithm3.png" alt="ผังงานการส่งจดหมาย"
-                                class="max-h-[380px] w-auto object-contain rounded-lg">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                            <i class="fa-solid fa-bullseye"></i> ได้ผลลัพธ์ถูกต้อง
                         </div>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            เมื่อปฏิบัติตามครบทุกขั้นตอน จะต้องได้ผลลัพธ์หรือคำตอบที่ตอบสนองต่อเป้าหมายของปัญหา
+                        </p>
                     </div>
-
                 </div>
             </section>
+
+            <!-- ============================================== -->
+            <!-- ส่วนที่ 3: โครงสร้างหลักของการเขียนผังงาน 3 รูปแบบ -->
+            <!-- ============================================== -->
+            <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 text-slate-800 font-bold font-heading text-lg sm:text-xl">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <span>2. โครงสร้างควบคุมของผังงาน (Control Structures)</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 1. ลำดับ -->
+                    <div
+                        class="p-4 rounded-2xl border border-slate-200 space-y-3 bg-gradient-to-b from-white to-slate-50 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">แบบที่
+                                1</span>
+                            <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบลำดับ (Sequence)</h4>
+                            <p class="text-xs text-slate-500 font-light leading-relaxed">
+                                การทำงานเรียงจากขั้นตอนบนลงล่างทีละขั้นตอนตามลำดับ ไม่มีการข้ามหรือย้อนกลับ เช่น
+                                การใช้ตู้โทรศัพท์ หรือการปลูกต้นไม้
+                            </p>
+                        </div>
+
+                        <!-- ส่วนรูปภาพผังงานจัดวางพอดีการ์ด -->
+                        <div
+                            class="w-full bg-slate-50/80 rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <img src="../img/structure1.png" alt="ผังงานโครงสร้างแบบลำดับ (Sequence)"
+                                onclick="openImageModal(this.src)"
+                                class="max-h-56 w-auto object-contain rounded-lg shadow-sm hover:scale-105 transition-transform duration-200 cursor-zoom-in"
+                                title="คลิกเพื่อดูภาพขนาดเต็ม">
+                        </div>
+                    </div>
+
+                    <!-- 2. ทางเลือก -->
+                    <div
+                        class="p-5 rounded-2xl border border-amber-200 space-y-3 bg-gradient-to-b from-white to-amber-50/30 flex flex-col justify-between shadow-sm">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">แบบที่
+                                2</span>
+                            <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบมีทางเลือก (Selection)</h4>
+                            <p class="text-xs text-slate-500 font-light leading-relaxed">
+                                มีการตรวจสอบเงื่อนไขเพื่อตัดสินใจเลือกทำงาน เช่น ถ้าฝนตกให้กางร่ม ถ้าไม่ตกให้เดินตามปกติ
+                            </p>
+                        </div>
+
+                        <div
+                            class="w-full bg-slate-50/80 rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <img src="../img/structure2.png" alt="ผังงานโครงสร้างแบบมีทางเลือก (Selection)"
+                                onclick="openImageModal(this.src)"
+                                class="max-h-56 w-auto object-contain rounded-lg shadow-sm hover:scale-105 transition-transform duration-200 cursor-zoom-in"
+                                title="คลิกเพื่อดูภาพขนาดเต็ม">
+                        </div>
+                    </div>
+
+                    <!-- แบบที่ 3: โครงสร้างแบบทำซ้ำ (Iteration / Loop) -->
+                    <div
+                        class="p-5 rounded-2xl border border-indigo-200 space-y-3 bg-gradient-to-b from-white to-indigo-50/30 flex flex-col justify-between shadow-sm">
+                        <div class="space-y-2">
+                            <span
+                                class="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800">แบบที่
+                                3</span>
+                            <h4 class="font-bold text-slate-800 text-sm">โครงสร้างแบบทำซ้ำ (Iteration / Loop)</h4>
+                            <p class="text-xs text-slate-500 font-light leading-relaxed">
+                                การทำงานซ้ำขั้นตอนเดิมตามเงื่อนไข เช่น การหยอดเหรียญซ้ำไปเรื่อยๆ
+                                จนกว่าจะครบตามจำนวนค่าโดยสาร
+                            </p>
+                        </div>
+
+                        <div
+                            class="w-full bg-slate-50/80 rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <img src="../img/structure3.png" alt="ผังงานโครงสร้างแบบทำซ้ำ (Iteration / Loop)"
+                                onclick="openImageModal(this.src)"
+                                class="max-h-56 w-auto object-contain rounded-lg shadow-sm hover:scale-105 transition-transform duration-200 cursor-zoom-in"
+                                title="คลิกเพื่อดูภาพขนาดเต็ม">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+
+            
 
             <!-- SECTION: FLOWGORITHM STUDIO GAME -->
             <section class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm">
@@ -619,6 +599,24 @@
                     บันทึกบล็อกลงผังงาน
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- กล่องแสดงภาพขยายเต็มจอ (Image Lightbox Modal) -->
+    <div id="imageLightboxModal" onclick="closeImageModal()"
+        class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 cursor-zoom-out transition-opacity duration-300">
+
+        <!-- ปุ่มปิดมุมบนขวา -->
+        <button type="button" onclick="closeImageModal()"
+            class="absolute top-5 right-5 w-11 h-11 rounded-2xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg transition shadow-lg cursor-pointer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- รูปภาพขนาดใหญ่ตรงกลางจอ -->
+        <div class="relative max-w-4xl max-h-[90vh] flex items-center justify-center p-2"
+            onclick="event.stopPropagation()">
+            <img id="lightboxImage" src="" alt="ภาพขยาย"
+                class="max-h-[85vh] max-w-full w-auto object-contain rounded-2xl shadow-2xl border border-white/10">
         </div>
     </div>
 

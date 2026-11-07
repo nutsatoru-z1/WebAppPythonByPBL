@@ -147,6 +147,32 @@ function renderTaskButtons() {
     container.innerHTML = html;
 }
 
+function displayStudentHeader() {
+    const rawData = localStorage.getItem("currentStudent");
+    if (!rawData) return;
+
+    try {
+        const student = JSON.parse(rawData);
+        
+        // ตรวจสอบชื่อ: ดึง fullName ก่อน ถ้าไม่มีให้ใช้ name ถ้าไม่มีให้ใช้ข้อความสำรอง
+        const studentName = student.fullName || student.name || "นักเรียน";
+        const studentNo = student.no || "";
+
+        // ค้นหาตำแหน่ง element ที่แสดงชื่อมุมขวาบน
+        const userDisplay = document.getElementById("student-info-display") 
+                         || document.getElementById("current-user-text")
+                         || document.getElementById("user-display-name");
+
+        if (userDisplay) {
+            userDisplay.textContent = `${studentName} (เลขที่ ${studentNo})`;
+        }
+    } catch (e) {
+        console.error("Error displaying student name:", e);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", displayStudentHeader);
+
 function loadFlowTask(taskKey) {
     currentTaskKey = taskKey;
     flowchartData = [];
@@ -529,3 +555,34 @@ function unlockAndNextTask() {
         alert("🎉 ยินดีด้วย! คุณพิชิตด่านผังงาน Flowgorithm ครบทั้ง 5 ข้อเรียบร้อยแล้ว!");
     }
 }
+
+
+
+// ฟังก์ชันเปิดดูภาพเต็มจอ
+function openImageModal(imgSrc) {
+  const modal = document.getElementById('imageLightboxModal');
+  const targetImg = document.getElementById('lightboxImage');
+  if (modal && targetImg) {
+    targetImg.src = imgSrc;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden'; // ป้องกันการเลื่อนหน้าจอด้านหลัง
+  }
+}
+
+// ฟังก์ชันปิดภาพเต็มจอ
+function closeImageModal() {
+  const modal = document.getElementById('imageLightboxModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = ''; // คืนค่าการเลื่อนหน้าจอตามปกติ
+  }
+}
+
+// ปิดเมื่อกดปุ่ม Escape (ESC) บนคีย์บอร์ด
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeImageModal();
+  }
+});

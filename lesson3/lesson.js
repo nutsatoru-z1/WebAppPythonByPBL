@@ -11,3 +11,29 @@ function checkCurrentUser() {
         userText.textContent = `${currentStudent.name} (เลขที่ ${currentStudent.no})`;
     }
 }
+
+function displayStudentHeader() {
+    const rawData = localStorage.getItem("currentStudent");
+    if (!rawData) return;
+
+    try {
+        const student = JSON.parse(rawData);
+        
+        // ตรวจสอบชื่อ: ดึง fullName ก่อน ถ้าไม่มีให้ใช้ name ถ้าไม่มีให้ใช้ข้อความสำรอง
+        const studentName = student.fullName || student.name || "นักเรียน";
+        const studentNo = student.no || "";
+
+        // ค้นหาตำแหน่ง element ที่แสดงชื่อมุมขวาบน
+        const userDisplay = document.getElementById("student-info-display") 
+                         || document.getElementById("current-user-text")
+                         || document.getElementById("user-display-name");
+
+        if (userDisplay) {
+            userDisplay.textContent = `${studentName} (เลขที่ ${studentNo})`;
+        }
+    } catch (e) {
+        console.error("Error displaying student name:", e);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", displayStudentHeader);
